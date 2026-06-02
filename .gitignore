@@ -2,12 +2,10 @@ venv/
 __pycache__/
 *.pyc
 *.h5
-*.keras
 *.pkl
 .env
 .ipynb_checkpoints/
 model/
-*.zip
 New Plant Diseases Dataset*/
 dataset/
 data/
