@@ -25,49 +25,58 @@ st.markdown("""
     .main-header {
         font-size: 2.5rem;
         font-weight: bold;
-        color: #1B6B2F;
+        color: #4caf50;
         text-align: center;
         margin-bottom: 0.5rem;
     }
     .sub-header {
         font-size: 1rem;
-        color: #555;
+        color: #aaa;
         text-align: center;
         margin-bottom: 2rem;
     }
     .result-box {
-        background: #f0f7f0;
-        border-left: 5px solid #1B6B2F;
+        background: #1e3a2f;
+        border-left: 5px solid #4caf50;
         padding: 1rem;
         border-radius: 4px;
         margin: 1rem 0;
+        color: #e0e0e0;
     }
+    .result-box h3 { color: #81c784; margin-bottom: 0.5rem; }
+    .result-box p { color: #e0e0e0; margin: 0.2rem 0; }
     .healthy-box {
-        background: #e8f5e9;
+        background: #1b3a1f;
         border-left: 5px solid #2e7d32;
         padding: 1rem;
         border-radius: 4px;
+        color: #e0e0e0;
     }
+    .healthy-box h3 { color: #81c784; margin-bottom: 0.5rem; }
+    .healthy-box p { color: #e0e0e0; margin: 0.2rem 0; }
     .severity-Early {
-        background: #fff9c4;
+        background: #3a3000;
         border-left: 5px solid #f9a825;
         padding: 0.8rem;
         border-radius: 4px;
         margin: 0.5rem 0;
+        color: #fff9c4;
     }
     .severity-Moderate {
-        background: #ffe0b2;
+        background: #3a1f00;
         border-left: 5px solid #ef6c00;
         padding: 0.8rem;
         border-radius: 4px;
         margin: 0.5rem 0;
+        color: #ffe0b2;
     }
     .severity-Advanced {
-        background: #ffcdd2;
+        background: #3a0000;
         border-left: 5px solid #c62828;
         padding: 0.8rem;
         border-radius: 4px;
         margin: 0.5rem 0;
+        color: #ffcdd2;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -136,8 +145,7 @@ with col1:
     )
     if uploaded_file:
         image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Uploaded Image",
-                 use_column_width=True)
+        st.image(image, caption="Uploaded Image", use_container_width=True)
 
 with col2:
     if uploaded_file:
