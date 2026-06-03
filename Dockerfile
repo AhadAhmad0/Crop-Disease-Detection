@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y \
 
 COPY requirements.txt ./
 COPY src/ ./src/
+COPY app.py ./
+COPY treatment_data.json ./
+COPY model/ ./model/
 
 RUN pip3 install -r requirements.txt
 
