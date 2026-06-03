@@ -1,0 +1,148 @@
+{
+  "Apple___Apple_scab": {
+    "common_name": "Apple Scab",
+    "severity_description": {
+      "Early": "Small olive-green spots on leaves. Limited spread.",
+      "Moderate": "Multiple dark scab lesions. Some leaf distortion.",
+      "Advanced": "Heavy scabbing, leaf drop, fruit affected."
+    },
+    "treatment": [
+      "Apply fungicide containing captan or myclobutanil",
+      "Remove and destroy infected leaves immediately",
+      "Improve air circulation by pruning",
+      "Avoid overhead irrigation"
+    ],
+    "prevention": "Apply preventive fungicide sprays in spring before symptoms appear"
+  },
+  "Apple___Black_rot": {
+    "common_name": "Apple Black Rot",
+    "severity_description": {
+      "Early": "Small purple spots on leaves.",
+      "Moderate": "Expanding brown lesions with purple border.",
+      "Advanced": "Large rotting areas, fruit mummification."
+    },
+    "treatment": [
+      "Remove infected branches and mummified fruit",
+      "Apply copper-based fungicide",
+      "Prune dead wood during dry weather",
+      "Disinfect pruning tools between cuts"
+    ],
+    "prevention": "Maintain tree vigor through proper fertilization and watering"
+  },
+  "Apple___Cedar_apple_rust": {
+    "common_name": "Cedar Apple Rust",
+    "severity_description": {
+      "Early": "Yellow-orange spots on upper leaf surface.",
+      "Moderate": "Spots enlarge with orange spore tubes below.",
+      "Advanced": "Severe defoliation, weakened tree."
+    },
+    "treatment": [
+      "Apply fungicide with myclobutanil or propiconazole",
+      "Remove nearby juniper or cedar trees if possible",
+      "Begin sprays at pink bud stage"
+    ],
+    "prevention": "Plant rust-resistant apple varieties"
+  },
+  "Apple___healthy": {
+    "common_name": "Healthy Apple",
+    "severity_description": {
+      "Early": "No disease detected.",
+      "Moderate": "No disease detected.",
+      "Advanced": "No disease detected."
+    },
+    "treatment": ["No treatment needed — plant appears healthy"],
+    "prevention": "Continue regular monitoring and preventive care"
+  },
+  "Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot": {
+    "common_name": "Gray Leaf Spot",
+    "severity_description": {
+      "Early": "Small tan rectangular lesions on lower leaves.",
+      "Moderate": "Lesions expand, merge on multiple leaves.",
+      "Advanced": "Widespread blighting, significant yield loss."
+    },
+    "treatment": [
+      "Apply fungicide with strobilurin or triazole",
+      "Increase plant spacing for better airflow",
+      "Rotate crops — avoid continuous maize planting"
+    ],
+    "prevention": "Use resistant hybrids and practice crop rotation"
+  },
+  "Corn_(maize)___Common_rust_": {
+    "common_name": "Common Rust",
+    "severity_description": {
+      "Early": "Small pustules on both leaf surfaces.",
+      "Moderate": "Numerous brick-red pustules visible.",
+      "Advanced": "Heavy pustule coverage, leaves dying."
+    },
+    "treatment": [
+      "Apply fungicide with propiconazole",
+      "Scout fields regularly during growing season",
+      "Apply at first sign of disease"
+    ],
+    "prevention": "Plant resistant corn varieties"
+  },
+  "Corn_(maize)___Northern_Leaf_Blight": {
+    "common_name": "Northern Leaf Blight",
+    "severity_description": {
+      "Early": "Small water-soaked lesions on lower leaves.",
+      "Moderate": "Tan cigar-shaped lesions 2.5-15 cm long.",
+      "Advanced": "Lesions cover most leaf area, severe blighting."
+    },
+    "treatment": [
+      "Apply foliar fungicide at early disease onset",
+      "Use strobilurin-based fungicides for best control",
+      "Remove heavily infected plant debris"
+    ],
+    "prevention": "Choose resistant hybrids and rotate crops"
+  },
+  "Corn_(maize)___healthy": {
+    "common_name": "Healthy Corn",
+    "severity_description": {
+      "Early": "No disease detected.",
+      "Moderate": "No disease detected.",
+      "Advanced": "No disease detected."
+    },
+    "treatment": ["No treatment needed — plant appears healthy"],
+    "prevention": "Continue regular scouting and crop management"
+  },
+  "Tomato___Early_blight": {
+    "common_name": "Tomato Early Blight",
+    "severity_description": {
+      "Early": "Small dark spots with concentric rings on older leaves.",
+      "Moderate": "Spots enlarge, yellowing around lesions.",
+      "Advanced": "Severe defoliation, stem lesions present."
+    },
+    "treatment": [
+      "Apply fungicide with chlorothalonil or mancozeb",
+      "Remove infected lower leaves immediately",
+      "Avoid wetting foliage when irrigating",
+      "Apply mulch to prevent soil splash"
+    ],
+    "prevention": "Use disease-free seeds and practice crop rotation"
+  },
+  "Tomato___Late_blight": {
+    "common_name": "Tomato Late Blight",
+    "severity_description": {
+      "Early": "Water-soaked pale green spots on leaves.",
+      "Moderate": "Brown lesions with white mold on undersides.",
+      "Advanced": "Rapid collapse of foliage and fruit rot."
+    },
+    "treatment": [
+      "Apply copper-based or mancozeb fungicide immediately",
+      "Remove and destroy all infected plant material",
+      "Do not compost infected material",
+      "Improve field drainage"
+    ],
+    "prevention": "Plant resistant varieties and avoid overhead irrigation"
+  },
+  "Tomato___healthy": {
+    "common_name": "Healthy Tomato",
+    "severity_description": {
+      "Early": "No disease detected.",
+      "Moderate": "No disease detected.",
+      "Advanced": "No disease detected."
+    },
+    "treatment": ["No treatment needed — plant appears healthy"],
+    "prevention": "Continue regular monitoring"
+  }
+}
