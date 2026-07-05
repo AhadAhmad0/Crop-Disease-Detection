@@ -109,7 +109,8 @@ Results + Recommendations
 
 ### Confusion Matrix
 
-![Confusion Matrix](assets/screenshots/confusion_matrix.png)
+<img width="1144" height="695" alt="Confusion_Matrix" src="https://github.com/user-attachments/assets/986226d3-060f-402b-bdd5-9da3c719a897" />
+
 
 ---
 
