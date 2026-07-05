@@ -11,16 +11,8 @@ A deep learning web application that detects crop diseases from leaf images, ass
 
 ## 📸 App Screenshots
 
-<!-- ADD SCREENSHOT 1 HERE -->
-<!-- Drag and drop your app homepage screenshot -->
 ![App Interface](assets/screenshots/app_homepage.png)
-
-<!-- ADD SCREENSHOT 2 HERE -->
-<!-- Drag and drop a screenshot showing a disease detection result -->
 ![Disease Detection Result](assets/screenshots/disease_result.png)
-
-<!-- ADD SCREENSHOT 3 HERE -->
-<!-- Drag and drop a screenshot showing a healthy plant result -->
 ![Healthy Plant Result](assets/screenshots/healthy_result.png)
 
 ---
@@ -48,34 +40,36 @@ Upload a leaf image and the app returns:
 
 ## 🏗️ Two-Stage Pipeline
 
+```
 Input Image
-│
-▼
+     │
+     ▼
 ┌─────────────────────────────┐
 │   Stage 1: Classification   │
 │   EfficientNetB0            │
 │   Transfer Learning         │
 │   14 Disease Classes        │
 └─────────────────────────────┘
-│
-▼
+     │
+     ▼
 ┌─────────────────────────────┐
 │   Stage 2: Severity         │
 │   Visual Feature Analysis   │
 │   Lesion Area + Color       │
 │   Early/Moderate/Advanced   │
 └─────────────────────────────┘
-│
-▼
+     │
+     ▼
 ┌─────────────────────────────┐
 │   Treatment Lookup          │
 │   Rule-based System         │
 │   Disease + Severity mapped │
 │   to specific treatments    │
 └─────────────────────────────┘
-│
-▼
+     │
+     ▼
 Results + Recommendations
+```
 
 ---
 
@@ -110,13 +104,11 @@ Results + Recommendations
 
 ### Training Curves
 
-<!-- ADD TRAINING CURVES HERE -->
 ![Training Accuracy](assets/screenshots/training_accuracy.png)
 ![Training Loss](assets/screenshots/training_loss.png)
 
 ### Confusion Matrix
 
-<!-- ADD CONFUSION MATRIX HERE -->
 ![Confusion Matrix](assets/screenshots/confusion_matrix.png)
 
 ---
@@ -148,25 +140,27 @@ Results + Recommendations
 
 ## 🧠 Model Architecture
 
+```
 Input (224×224×3)
-│
-▼
+      │
+      ▼
 EfficientNetB0 (ImageNet weights, frozen in Phase 1)
-│
-▼
+      │
+      ▼
 GlobalAveragePooling2D
-│
-▼
+      │
+      ▼
 BatchNormalization
-│
-▼
+      │
+      ▼
 Dense(512, relu) → Dropout(0.4)
-│
-▼
+      │
+      ▼
 Dense(256, relu) → Dropout(0.3)
-│
-▼
+      │
+      ▼
 Dense(14, softmax)
+```
 
 **Two-phase training:**
 - **Phase 1:** Base model frozen — only top layers trained (15 epochs)
@@ -176,6 +170,7 @@ Dense(14, softmax)
 
 ## 📁 Project Structure
 
+```
 Crop-Disease-Detection/
 ├── app.py                          # Streamlit web application
 ├── requirements.txt                # Dependencies
@@ -195,7 +190,8 @@ Crop-Disease-Detection/
 │   └── training.ipynb             # Training notebook (Kaggle)
 │
 └── assets/
-└── screenshots/               # App screenshots and plots
+    └── screenshots/               # App screenshots and plots
+```
 
 ---
 
@@ -271,7 +267,7 @@ During development, EfficientNetB0 in Keras 3 / TensorFlow 2.19 required raw 0-2
 AI/ML Engineering Student — Shri Ramswaroop Memorial University
 
 [![GitHub](https://img.shields.io/badge/GitHub-AhadAhmad0-black)](https://github.com/AhadAhmad0)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ahad%20Ahmad-blue)](https://linkedin.com/in/your-linkedin-url)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ahad%20Ahmad-blue)](https://www.linkedin.com/in/ahadahmad7/)
 
 ---
 
