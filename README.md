@@ -14,10 +14,14 @@ A deep learning web application that detects crop diseases from leaf images, ass
 <img width="1877" height="907" alt="Screenshot 2026-07-06 173417" src="https://github.com/user-attachments/assets/09fd6874-e195-416b-8d7d-ea7080af3f96" />
 <img width="1883" height="900" alt="Screenshot 2026-07-06 173432" src="https://github.com/user-attachments/assets/30dea9b1-33c0-4112-b0a1-58c625876ccd" />
 
+
 DISEASE DETECTION RESULT
 <img width="1886" height="905" alt="Screenshot 2026-07-06 173710" src="https://github.com/user-attachments/assets/b7130d09-33c7-429d-9adb-ea01a2c4f335" />
 
-![Healthy Plant Result](assets/screenshots/healthy_result.png)
+
+HEALTHY PLANT RESULT
+<img width="1882" height="911" alt="image" src="https://github.com/user-attachments/assets/78f956ad-b94e-4b09-b2a8-1ce24716d2fc" />
+
 
 ---
 
