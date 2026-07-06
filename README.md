@@ -11,7 +11,9 @@ A deep learning web application that detects crop diseases from leaf images, ass
 
 ## 📸 App Screenshots
 
-![App Interface](assets/screenshots/app_homepage.png)
+<img width="1877" height="907" alt="Screenshot 2026-07-06 173417" src="https://github.com/user-attachments/assets/09fd6874-e195-416b-8d7d-ea7080af3f96" />
+<img width="1883" height="900" alt="Screenshot 2026-07-06 173432" src="https://github.com/user-attachments/assets/30dea9b1-33c0-4112-b0a1-58c625876ccd" />
+
 ![Disease Detection Result](assets/screenshots/disease_result.png)
 ![Healthy Plant Result](assets/screenshots/healthy_result.png)
 
