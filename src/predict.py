@@ -1,21 +1,30 @@
 import numpy as np
 import tensorflow as tf
 from src.utils import preprocess_image, assess_severity, get_treatment
+from src.gradcam import make_gradcam_heatmap, overlay_gradcam, get_base_model
 import json
 import os
+
 
 def load_class_names(path="model/class_names.json"):
     with open(path, "r") as f:
         return json.load(f)
 
+
 def load_model(model_path="model/crop_disease_model.keras"):
     return tf.keras.models.load_model(model_path)
 
-def predict(image, model, class_names, treatment_data):
+
+def predict(image, model, class_names, treatment_data, generate_gradcam=True):
     """
     Two-stage prediction pipeline:
     Stage 1 — Disease classification using EfficientNetB0
     Stage 2 — Severity assessment using visual features
+
+    generate_gradcam: if True, attempts to add a 'gradcam_image' key
+    (PIL Image) to the result. On any failure this is silently omitted
+    rather than breaking the whole prediction -- Grad-CAM is a nice-to-have
+    explanation layer, not a dependency of the core diagnosis.
     """
     # Preprocess — raw 0-255 pixels matching training
     processed = preprocess_image(image)
@@ -35,7 +44,7 @@ def predict(image, model, class_names, treatment_data):
         disease_class, severity, treatment_data
     )
 
-    return {
+    result = {
         "disease_class": disease_class,
         "common_name": treatment_info["common_name"],
         "confidence": confidence,
@@ -53,3 +62,18 @@ def predict(image, model, class_names, treatment_data):
             for i in np.argsort(predictions[0])[-3:][::-1]
         ]
     }
+
+    if generate_gradcam:
+        try:
+            base_model = get_base_model(model)
+            heatmap = make_gradcam_heatmap(
+                processed, model, base_model, pred_index=predicted_idx
+            )
+            result["gradcam_image"] = overlay_gradcam(image, heatmap)
+        except Exception as gradcam_error:
+            # Don't let a Grad-CAM failure take down the whole prediction.
+            # The app.py UI slot for gradcam_image is already conditional
+            # on this key existing, so omitting it just hides that section.
+            print(f"[gradcam] skipped: {gradcam_error}")
+
+    return result
