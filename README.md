@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🌿 Crop Disease Detection & Severity Assessment
 
 A deep learning web application that detects crop diseases from leaf images, assesses disease severity, and provides actionable treatment recommendations — built for real-world agricultural impact.
@@ -284,3 +285,24 @@ AI/ML Engineering Student — Shri Ramswaroop Memorial University
 ## 📄 License
 
 This project is open source and available under the [MIT License](LICENSE).
+=======
+---
+title: Crop Disease Detection
+emoji: 🚀
+colorFrom: red
+colorTo: red
+sdk: docker
+app_port: 8501
+tags:
+- streamlit
+pinned: false
+short_description: Streamlit template space
+---
+
+# Welcome to Streamlit!
+
+Edit `/src/streamlit_app.py` to customize this app to your heart's desire. :heart:
+
+If you have any questions, checkout our [documentation](https://docs.streamlit.io) and [community
+forums](https://discuss.streamlit.io).
+>>>>>>> 1cc39b4f3e442144e1b9df11c3a4614f0bc106b9
