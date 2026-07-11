@@ -8,7 +8,7 @@ app_port: 8501
 tags:
 - streamlit
 pinned: false
-short_description: AI-powered crop disease detection with Grad-CAM explainability
+short_description: AI crop disease detection with Grad-CAM
 ---
 
 # 🌿 Crop Disease Detection & Severity Assessment
