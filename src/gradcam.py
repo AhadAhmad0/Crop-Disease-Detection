@@ -45,13 +45,13 @@ def make_gradcam_heatmap(img_array, model, base_model=None,
 
     conv_layer = base_model.get_layer(last_conv_layer_name)
 
-    # get_output_at(-1) pulls the tensor from the most recent call of this
-    # layer, i.e. the call that happens inside the outer model on our real
-    # input -- not the base_model's own standalone graph.
+    # `.output` works here because top_activation is called exactly once,
+    # inside base_model's own internal graph — Keras 3 removed get_output_at,
+    # which was only needed for layers reused across multiple call sites.
     grad_model = tf.keras.models.Model(
-        inputs=model.inputs,
-        outputs=[conv_layer.get_output_at(-1), model.output]
-    )
+    inputs=model.inputs,
+    outputs=[conv_layer.output, model.output]
+)
 
     with tf.GradientTape() as tape:
         conv_output, predictions = grad_model(img_array)
