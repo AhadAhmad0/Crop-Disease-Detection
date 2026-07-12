@@ -159,6 +159,15 @@ st.markdown("""
     .results-shell {
         min-height: 620px;
     }
+
+    .stImage img {
+        max-height: 450px;
+        width: auto;
+        object-fit: contain;
+        border-radius: 12px;
+        display: block;
+        margin: 0 auto;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -243,7 +252,7 @@ with col1:
     )
     if uploaded_file:
         image = Image.open(uploaded_file).convert("RGB")
-        st.image(image, caption="Input Image", use_container_width=True)
+        st.image(image, caption="Input Image", width='stretch')
 
 with col2:
     st.markdown("#### Analysis Results")
@@ -336,7 +345,7 @@ with col2:
                         st.image(
                             result["gradcam_image"],
                             caption="Highlighted regions influenced the prediction",
-                            use_container_width=True
+                            width='stretch'
                         )
 
                 except Exception as e:
