@@ -30,41 +30,30 @@ def get_base_model(model, last_conv_layer_name=LAST_CONV_LAYER_NAME):
 def make_gradcam_heatmap(img_array, model, base_model=None,
                           last_conv_layer_name=LAST_CONV_LAYER_NAME,
                           pred_index=None):
-    """
-    img_array: preprocessed image, shape (1, 224, 224, 3), raw 0-255
-               (must match the training preprocessing exactly).
-    model: the full loaded classification model.
-    base_model: optional, pass in if already resolved elsewhere to
-                avoid re-searching model.layers.
-    pred_index: class index to explain. Defaults to the predicted class.
-
-    Returns a 2D numpy heatmap, values normalized to [0, 1].
-
-    Implementation note: Keras 3 treats a nested model call (e.g.
-    `x = base_model(inputs)` inside an outer functional model) as an
-    opaque node, so the base model's internal layer outputs are not
-    directly reachable from the outer model's graph -- trying to build
-    Model(inputs=model.inputs, outputs=[conv_layer.output, model.output])
-    raises "Output ... is not connected to inputs". Instead we build a
-    separate small model scoped to base_model's own graph for the conv
-    output, and run it alongside the full model inside the same
-    GradientTape, both fed from the same watched input tensor. Gradients
-    still flow correctly since both branches trace back to that tensor.
-    """
     if base_model is None:
         base_model = get_base_model(model, last_conv_layer_name)
 
-    conv_model = tf.keras.models.Model(
-        inputs=base_model.inputs,
+    conv_layer_model = tf.keras.models.Model(
+        inputs=base_model.input,
         outputs=base_model.get_layer(last_conv_layer_name).output
     )
+
+    # Everything in `model` that comes after the base_model layer --
+    # the classification head (GAP, BatchNorm, Dense, Dropout, ...).
+    base_index = model.layers.index(base_model)
+    head_layers = model.layers[base_index + 1:]
 
     img_tensor = tf.convert_to_tensor(img_array)
 
     with tf.GradientTape() as tape:
-        tape.watch(img_tensor)
-        conv_output = conv_model(img_tensor, training=False)
-        predictions = model(img_tensor, training=False)
+        conv_output = conv_layer_model(img_tensor, training=False)
+        tape.watch(conv_output)
+
+        x = conv_output
+        for layer in head_layers:
+            x = layer(x, training=False)
+        predictions = x
+
         if pred_index is None:
             pred_index = tf.argmax(predictions[0])
         class_channel = predictions[:, pred_index]
