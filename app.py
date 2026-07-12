@@ -240,9 +240,9 @@ with st.sidebar:
     )
 
 # ---------------------------------------------------------------------------
-# Main layout
+# Main layout: Upload | Grad-CAM | Analysis Results
 # ---------------------------------------------------------------------------
-col1, col2 = st.columns([1, 1])
+col1, col2, col3 = st.columns([1, 1, 1])
 
 with col1:
     st.markdown("#### Upload Leaf Image")
@@ -254,7 +254,32 @@ with col1:
         image = Image.open(uploaded_file).convert("RGB")
         st.image(image, caption="Input Image", width='stretch')
 
+# Run prediction once, outside the columns, so col2 and col3 can both use it.
+result = None
+prediction_error = None
+if uploaded_file:
+    with st.spinner("Analyzing leaf image..."):
+        try:
+            model, class_names, treatment_data = load_model_and_data()
+            result = predict(image, model, class_names, treatment_data)
+        except Exception as e:
+            result = None
+            prediction_error = str(e)
+
 with col2:
+    st.markdown("#### Model Attention (Grad-CAM)")
+    if uploaded_file and result and "gradcam_image" in result:
+        st.image(
+            result["gradcam_image"],
+            caption="Highlighted regions influenced the prediction",
+            width='stretch'
+        )
+    elif uploaded_file and result:
+        st.markdown('<div class="card"><p>Grad-CAM not available for this prediction.</p></div>', unsafe_allow_html=True)
+    else:
+        st.markdown('<div class="card"><p>Upload an image to see model attention.</p></div>', unsafe_allow_html=True)
+
+with col3:
     st.markdown("#### Analysis Results")
 
     # Fixed-height shell: prevents the card layout from jumping between
@@ -265,92 +290,75 @@ with col2:
     with results_shell:
         st.markdown('<div class="results-shell">', unsafe_allow_html=True)
 
-        if uploaded_file:
-            with st.spinner("Analyzing leaf image..."):
-                try:
-                    model, class_names, treatment_data = load_model_and_data()
-                    result = predict(image, model, class_names, treatment_data)
+        if uploaded_file and result:
+            is_healthy = result["is_healthy"]
+            confidence = result["confidence"]
+            name = result["common_name"]
 
-                    is_healthy = result["is_healthy"]
-                    confidence = result["confidence"]
-                    name = result["common_name"]
+            # --- Diagnosis card -------------------------------------------------
+            if is_healthy:
+                badge_html = '<span class="badge badge-healthy">Healthy</span>'
+            else:
+                severity = result["severity"]
+                badge_html = f'<span class="badge badge-{severity}">{severity} Severity</span>'
 
-                    # --- Diagnosis card -------------------------------------------------
-                    if is_healthy:
-                        badge_html = '<span class="badge badge-healthy">Healthy</span>'
-                    else:
-                        severity = result["severity"]
-                        badge_html = f'<span class="badge badge-{severity}">{severity} Severity</span>'
-
-                    st.markdown(f"""
-                    <div class="card">
-                        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                            <div>
-                                <h3>Diagnosis</h3>
-                                <p class="diagnosis-name">{'✅ Healthy — ' + name if is_healthy else name}</p>
-                            </div>
-                            {badge_html}
-                        </div>
-                        <div class="conf-label">
-                            <span>Model Confidence</span>
-                            <span>{confidence:.1f}%</span>
-                        </div>
-                        <div class="conf-track">
-                            <div class="conf-fill" style="width:{confidence:.1f}%;"></div>
-                        </div>
-                        {f'<p class="symptom-quote">{result["severity_info"]}</p>' if not is_healthy else ''}
+            st.markdown(f"""
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <h3>Diagnosis</h3>
+                        <p class="diagnosis-name">{'✅ Healthy — ' + name if is_healthy else name}</p>
                     </div>
-                    """, unsafe_allow_html=True)
+                    {badge_html}
+                </div>
+                <div class="conf-label">
+                    <span>Model Confidence</span>
+                    <span>{confidence:.1f}%</span>
+                </div>
+                <div class="conf-track">
+                    <div class="conf-fill" style="width:{confidence:.1f}%;"></div>
+                </div>
+                {f'<p class="symptom-quote">{result["severity_info"]}</p>' if not is_healthy else ''}
+            </div>
+            """, unsafe_allow_html=True)
 
-                    # --- Top 3 predictions -----------------------------------------------
-                    with st.expander("Top 3 Predictions", expanded=False):
-                        for item in result["top_3"]:
-                            st.markdown(
-                                f"**{item['class']}** — {item['confidence']:.2f}%"
-                            )
+            # --- Top 3 predictions -----------------------------------------------
+            with st.expander("Top 3 Predictions", expanded=False):
+                for item in result["top_3"]:
+                    st.markdown(
+                        f"**{item['class']}** — {item['confidence']:.2f}%"
+                    )
 
-                    # --- Treatment / Prevention ------------------------------------------
-                    if is_healthy:
-                        st.markdown(f"""
-                        <div class="card">
-                            <h3>🛡️ Prevention</h3>
-                            <p>{result['prevention']}</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        t_col1, t_col2 = st.columns(2)
-                        with t_col1:
-                            treatment_items = "".join(
-                                f"<li>✅ {step}</li>" for step in result["treatment"]
-                            )
-                            st.markdown(f"""
-                            <div class="card">
-                                <h3>💊 Treatment</h3>
-                                <ul style="padding-left:1rem; margin:0;">{treatment_items}</ul>
-                            </div>
-                            """, unsafe_allow_html=True)
-                        with t_col2:
-                            st.markdown(f"""
-                            <div class="card">
-                                <h3>🛡️ Prevention</h3>
-                                <p>{result['prevention']}</p>
-                            </div>
-                            """, unsafe_allow_html=True)
+            # --- Treatment / Prevention ------------------------------------------
+            # Stacked (not side-by-side) since this column is now a third of
+            # the page width instead of half.
+            if is_healthy:
+                st.markdown(f"""
+                <div class="card">
+                    <h3>🛡️ Prevention</h3>
+                    <p>{result['prevention']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+            else:
+                treatment_items = "".join(
+                    f"<li>✅ {step}</li>" for step in result["treatment"]
+                )
+                st.markdown(f"""
+                <div class="card">
+                    <h3>💊 Treatment</h3>
+                    <ul style="padding-left:1rem; margin:0;">{treatment_items}</ul>
+                </div>
+                """, unsafe_allow_html=True)
+                st.markdown(f"""
+                <div class="card">
+                    <h3>🛡️ Prevention</h3>
+                    <p>{result['prevention']}</p>
+                </div>
+                """, unsafe_allow_html=True)
 
-                    # --- Grad-CAM slot (conditional — only renders once your pipeline
-                    # actually produces a gradcam image; otherwise omitted rather than
-                    # shown as a fake/placeholder feature) -----------------------------
-                    if "gradcam_image" in result:
-                        st.markdown("#### Model Attention (Grad-CAM)")
-                        st.image(
-                            result["gradcam_image"],
-                            caption="Highlighted regions influenced the prediction",
-                            width='stretch'
-                        )
-
-                except Exception as e:
-                    st.error(f"Error: {str(e)}")
-                    st.info("Please try uploading a different image.")
+        elif uploaded_file and not result:
+            st.error(f"Error: {prediction_error}")
+            st.info("Please try uploading a different image.")
         else:
             st.markdown("""
             <div class="card">
