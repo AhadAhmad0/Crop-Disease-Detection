@@ -286,7 +286,14 @@ with col2:
         st.markdown('<div style="height: 120px;"></div>', unsafe_allow_html=True)
         st.markdown('<div class="card"><p>Grad-CAM not available for this prediction.</p></div>', unsafe_allow_html=True)
     else:
-        st.markdown('<div class="card"><p>Upload an image to see model attention.</p></div>', unsafe_allow_html=True)
+        # Spacer matches col1's "Choose an image" label height so both
+        # boxes start at the same vertical level before any upload.
+        st.markdown('<div style="height: 29px;"></div>', unsafe_allow_html=True)
+        st.markdown(
+            '<div class="card" style="display:flex; align-items:center; min-height:52px; margin-bottom:0;">'
+            '<p style="margin:0;">Upload an image to see model attention.</p></div>',
+            unsafe_allow_html=True
+        )
 
 # ---------------------------------------------------------------------------
 # Analysis Results — full-width section below the upload/grad-cam row
