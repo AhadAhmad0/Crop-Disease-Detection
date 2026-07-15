@@ -274,12 +274,16 @@ if uploaded_file:
 
 with col2:
     if uploaded_file and result and "gradcam_image" in result:
+        # Spacer matches col1's "Choose an image" label + file-chip box
+        # height so both images start at the same vertical level.
+        st.markdown('<div style="height: 120px;"></div>', unsafe_allow_html=True)
         st.image(
             result["gradcam_image"],
             caption="Highlighted regions influenced the prediction",
             width='stretch'
         )
     elif uploaded_file and result:
+        st.markdown('<div style="height: 120px;"></div>', unsafe_allow_html=True)
         st.markdown('<div class="card"><p>Grad-CAM not available for this prediction.</p></div>', unsafe_allow_html=True)
     else:
         st.markdown('<div class="card"><p>Upload an image to see model attention.</p></div>', unsafe_allow_html=True)
