@@ -234,9 +234,11 @@ with st.sidebar:
     )
 
 # ---------------------------------------------------------------------------
-# Main layout: Upload | Grad-CAM | Analysis Results
+# Top row: Upload | Grad-CAM (same widget type in both columns, so they
+# align naturally without needing manual height hacks). Analysis Results
+# is a full-width section below, not squeezed into a third column.
 # ---------------------------------------------------------------------------
-col1, col2, col3 = st.columns([1, 1, 1])
+col1, col2 = st.columns([1, 1])
 
 with col1:
     st.markdown("#### Upload Leaf Image")
@@ -250,24 +252,16 @@ with col1:
 
 with col2:
     st.markdown("#### Model Attention (Grad-CAM)")
-    # Spacer to match col1's file-uploader widget height so both images
-    # start at the same vertical level. Adjust this value by eye if your
-    # browser/font rendering shifts the uploader's height slightly.
-    st.markdown('<div style="height: 76px;"></div>', unsafe_allow_html=True)
 
-with col3:
-    st.markdown("#### Analysis Results")
-
-# Run prediction once, outside the columns, so col2 and col3 can both use
-# it. Placeholders give col2/col3 visible "Analyzing..." content instead of
-# a blank gap while load_model_and_data()/predict() are running.
+# Run prediction once, outside the columns, so col2 and the results
+# section below can both use it. Placeholder gives col2 visible
+# "Analyzing..." content instead of a blank gap while
+# load_model_and_data()/predict() are running.
 result = None
 prediction_error = None
 if uploaded_file:
     gradcam_placeholder = col2.empty()
-    results_placeholder = col3.empty()
     gradcam_placeholder.markdown('<div class="card"><p>Analyzing...</p></div>', unsafe_allow_html=True)
-    results_placeholder.markdown('<div class="card"><p>Analyzing...</p></div>', unsafe_allow_html=True)
 
     try:
         model, class_names, treatment_data = load_model_and_data()
@@ -277,7 +271,6 @@ if uploaded_file:
         prediction_error = str(e)
 
     gradcam_placeholder.empty()
-    results_placeholder.empty()
 
 with col2:
     if uploaded_file and result and "gradcam_image" in result:
@@ -291,57 +284,64 @@ with col2:
     else:
         st.markdown('<div class="card"><p>Upload an image to see model attention.</p></div>', unsafe_allow_html=True)
 
-with col3:
-    if uploaded_file and result:
-        is_healthy = result["is_healthy"]
-        confidence = result["confidence"]
-        name = result["common_name"]
+# ---------------------------------------------------------------------------
+# Analysis Results — full-width section below the upload/grad-cam row
+# ---------------------------------------------------------------------------
+st.markdown("---")
+st.markdown("#### Analysis Results")
 
-        # --- Diagnosis card -------------------------------------------------
-        if is_healthy:
-            badge_html = '<span class="badge badge-healthy">Healthy</span>'
-        else:
-            severity = result["severity"]
-            badge_html = f'<span class="badge badge-{severity}">{severity} Severity</span>'
+if uploaded_file and result:
+    is_healthy = result["is_healthy"]
+    confidence = result["confidence"]
+    name = result["common_name"]
 
+    # --- Diagnosis card -------------------------------------------------
+    if is_healthy:
+        badge_html = '<span class="badge badge-healthy">Healthy</span>'
+    else:
+        severity = result["severity"]
+        badge_html = f'<span class="badge badge-{severity}">{severity} Severity</span>'
+
+    st.markdown(f"""
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+                <h3>Diagnosis</h3>
+                <p class="diagnosis-name">{'✅ Healthy — ' + name if is_healthy else name}</p>
+            </div>
+            {badge_html}
+        </div>
+        <div class="conf-label">
+            <span>Model Confidence</span>
+            <span>{confidence:.1f}%</span>
+        </div>
+        <div class="conf-track">
+            <div class="conf-fill" style="width:{confidence:.1f}%;"></div>
+        </div>
+        {f'<p class="symptom-quote">{result["severity_info"]}</p>' if not is_healthy else ''}
+    </div>
+    """, unsafe_allow_html=True)
+
+    # --- Top 3 predictions -----------------------------------------------
+    with st.expander("Top 3 Predictions", expanded=False):
+        for item in result["top_3"]:
+            st.markdown(
+                f"**{item['class']}** — {item['confidence']:.2f}%"
+            )
+
+    # --- Treatment / Prevention ------------------------------------------
+    # Full-width section now, so treatment/prevention go back to
+    # side-by-side columns for better use of the horizontal space.
+    if is_healthy:
         st.markdown(f"""
         <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                <div>
-                    <h3>Diagnosis</h3>
-                    <p class="diagnosis-name">{'✅ Healthy — ' + name if is_healthy else name}</p>
-                </div>
-                {badge_html}
-            </div>
-            <div class="conf-label">
-                <span>Model Confidence</span>
-                <span>{confidence:.1f}%</span>
-            </div>
-            <div class="conf-track">
-                <div class="conf-fill" style="width:{confidence:.1f}%;"></div>
-            </div>
-            {f'<p class="symptom-quote">{result["severity_info"]}</p>' if not is_healthy else ''}
+            <h3>🛡️ Prevention</h3>
+            <p>{result['prevention']}</p>
         </div>
         """, unsafe_allow_html=True)
-
-        # --- Top 3 predictions -----------------------------------------------
-        with st.expander("Top 3 Predictions", expanded=False):
-            for item in result["top_3"]:
-                st.markdown(
-                    f"**{item['class']}** — {item['confidence']:.2f}%"
-                )
-
-        # --- Treatment / Prevention ------------------------------------------
-        # Stacked (not side-by-side) since this column is now a third of
-        # the page width instead of half.
-        if is_healthy:
-            st.markdown(f"""
-            <div class="card">
-                <h3>🛡️ Prevention</h3>
-                <p>{result['prevention']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-        else:
+    else:
+        t_col1, t_col2 = st.columns(2)
+        with t_col1:
             treatment_items = "".join(
                 f"<li>✅ {step}</li>" for step in result["treatment"]
             )
@@ -351,6 +351,7 @@ with col3:
                 <ul style="padding-left:1rem; margin:0;">{treatment_items}</ul>
             </div>
             """, unsafe_allow_html=True)
+        with t_col2:
             st.markdown(f"""
             <div class="card">
                 <h3>🛡️ Prevention</h3>
@@ -358,23 +359,23 @@ with col3:
             </div>
             """, unsafe_allow_html=True)
 
-    elif uploaded_file and not result:
-        st.error(f"Error: {prediction_error}")
-        st.info("Please try uploading a different image.")
-    else:
-        st.markdown("""
-        <div class="card">
-            <p>👈 Upload a leaf image to get started</p>
-            <p style="margin-top:0.75rem; color:#414844;">
-                <strong>After uploading you will see:</strong><br>
-                ✅ Disease name and confidence score<br>
-                🟡 Severity — Early / Moderate / Advanced<br>
-                💊 Step-by-step treatment recommendations<br>
-                🛡️ Prevention advice<br>
-                📊 Top 3 predictions
-            </p>
-        </div>
-        """, unsafe_allow_html=True)
+elif uploaded_file and not result:
+    st.error(f"Error: {prediction_error}")
+    st.info("Please try uploading a different image.")
+else:
+    st.markdown("""
+    <div class="card">
+        <p>👈 Upload a leaf image to get started</p>
+        <p style="margin-top:0.75rem; color:#414844;">
+            <strong>After uploading you will see:</strong><br>
+            ✅ Disease name and confidence score<br>
+            🟡 Severity — Early / Moderate / Advanced<br>
+            💊 Step-by-step treatment recommendations<br>
+            🛡️ Prevention advice<br>
+            📊 Top 3 predictions
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.markdown("---")
 st.markdown(
