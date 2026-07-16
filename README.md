@@ -11,7 +11,14 @@ An end-to-end deep learning application that detects crop leaf diseases from ima
 
 **[Live Demo →](https://huggingface.co/spaces/AhadAhmad0/crop-disease-detection)**
 
-![AgroScan AI interface](screenshots/app-overview.png)
+![AgroScan AI interface]
+
+<img width="1882" height="910" alt="Screenshot 2026-07-16 181937" src="https://github.com/user-attachments/assets/eb2ed76c-094c-4260-99dc-8c5e5a9bceac" />
+
+
+<img width="1886" height="908" alt="Screenshot 2026-07-16 181959" src="https://github.com/user-attachments/assets/8ca8a373-914d-49fd-a2fa-beb0e5aeb323" />
+
+
 
 ---
 
