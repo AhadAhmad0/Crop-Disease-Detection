@@ -1,8 +1,17 @@
 # 🌿 AgroScan AI — Crop Disease Detection
 
+![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python&logoColor=white)
+![TensorFlow](https://img.shields.io/badge/TensorFlow-2.19-FF6F00?logo=tensorflow&logoColor=white)
+![Keras](https://img.shields.io/badge/Keras-3-D00000?logo=keras&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Deployed-2496ED?logo=docker&logoColor=white)
+![Hugging Face](https://img.shields.io/badge/🤗%20Spaces-Live%20Demo-yellow)
+
 An end-to-end deep learning application that detects crop leaf diseases from images, assesses severity, explains its predictions visually, and recommends treatment — deployed as a live web app.
 
 **[Live Demo →](https://huggingface.co/spaces/AhadAhmad0/crop-disease-detection)**
+
+![AgroScan AI interface](screenshots/app-overview.png)
 
 ---
 
@@ -40,6 +49,8 @@ This isn't a drop-in application of the standard Keras Grad-CAM recipe — Effic
 2. Manually re-applies the classification head's layers (GAP, BatchNorm, Dense, Dropout, ...) on top of that conv output, inside a single `GradientTape`
 3. This keeps everything in one connected differentiable chain, so gradients flow correctly from the predicted class back to the conv activations
 
+![Grad-CAM example](screenshots/gradcam-example.png)
+
 ### Application
 
 - **Frontend:** Streamlit, with a custom design system (CSS variables, card components, severity badges) rather than default Streamlit styling
@@ -61,6 +72,7 @@ crop-disease-detection/
 ├── model/
 │   ├── crop_disease_model.keras   # Trained model weights (tracked via Git LFS)
 │   └── class_names.json           # Class index → disease name mapping
+├── screenshots/                # README images
 ├── treatment_data.json         # Disease/severity → treatment & prevention mapping
 ├── Dockerfile                  # Container definition for Hugging Face Spaces deployment
 ├── requirements.txt            # Local development dependencies
