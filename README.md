@@ -11,7 +11,7 @@ An end-to-end deep learning application that detects crop leaf diseases from ima
 
 **[Live Demo →](https://huggingface.co/spaces/AhadAhmad0/crop-disease-detection)**
 
-![AgroScan AI interface]
+AgroScan AI interface
 
 <img width="1882" height="910" alt="Screenshot 2026-07-16 181937" src="https://github.com/user-attachments/assets/eb2ed76c-094c-4260-99dc-8c5e5a9bceac" />
 
@@ -56,7 +56,10 @@ This isn't a drop-in application of the standard Keras Grad-CAM recipe — Effic
 2. Manually re-applies the classification head's layers (GAP, BatchNorm, Dense, Dropout, ...) on top of that conv output, inside a single `GradientTape`
 3. This keeps everything in one connected differentiable chain, so gradients flow correctly from the predicted class back to the conv activations
 
-![Grad-CAM example](screenshots/gradcam-example.png)
+Grad-CAM example
+
+<img width="1353" height="833" alt="Screenshot 2026-07-16 182226" src="https://github.com/user-attachments/assets/f6c36891-3d6e-4af8-a13b-3e2c232dc169" />
+
 
 ### Application
 
